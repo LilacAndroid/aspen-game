@@ -16,6 +16,7 @@ Lead programmer. World's best android, world's worst girl.
 
 ### iiyen/yujuhy (yoo-joo-hee) (Yen)! [he/they]
 
+![Drawing of Bob the Minion as Kim Dokja](https://ibb.co/XZf3gVxM)
 Creative director, lead writer. muh luh muh !!!
 
 ### sevvism (Shy)!
