@@ -10,13 +10,15 @@ Yen (iiYen/yujuhy (yoo-joo-hee))
 # STUDIO BUTTONCAT IS...
 ### lilacandroid (Addie)! [it/she]
 
-![Drawing of Addie's online presence by @rottn_art](https://cdn.discordapp.com/attachments/828777680773447683/1456181344265699430/addiesona.png?ex=69576e0f&is=69561c8f&hm=d6d85bebcfc7341c4b00a1e24d401ea75e0b505e5563bb5962bf10a83b745795&)
+<img width="380" height="431" alt="addiesonasquare" src="https://github.com/user-attachments/assets/64902a29-8de6-489e-9d84-13258513f0f5" />
 
 Lead programmer. World's best android, world's worst girl.
 
+
 ### iiyen/yujuhy (yoo-joo-hee) (Yen)! [he/they]
 
-![Drawing of Bob the Minion as Kim Dokja](https://ibb.co/XZf3gVxM)
+<img width="400" height="400" alt="yujuhy" src="https://github.com/user-attachments/assets/98fff60a-6f2a-4a07-906c-ca0451df5698" />
+
 Creative director, lead writer. muh luh muh !!!
 
 ### alllightflows (Shy) [she/him]
