@@ -19,4 +19,7 @@ Lead programmer. World's best android, world's worst girl.
 ![Drawing of Bob the Minion as Kim Dokja](https://ibb.co/XZf3gVxM)
 Creative director, lead writer. muh luh muh !!!
 
-### sevvism (Shy)!
+### alllightflows (Shy) [she/him]
+
+Writer!!
+
