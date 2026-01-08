@@ -12,7 +12,7 @@ Yen (iiYen/yujuhy (yoo-joo-hee))
 
 <img width="380" height="431" alt="addiesonasquare" src="https://github.com/user-attachments/assets/64902a29-8de6-489e-9d84-13258513f0f5" />
 
-Lead programmer. World's best android, world's worst girl.
+Lead programmer. World's best android, world's worst girl. The Computer Angel of Studio Buttoncat.
 
 
 ### iiyen/yujuhy (yoo-joo-hee) (Yen)! [he/they]
