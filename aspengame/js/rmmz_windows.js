@@ -1747,8 +1747,8 @@ Window_StatusBase.prototype.placeTimeGauge = function(actor, x, y) {
 };
 
 Window_StatusBase.prototype.placeBasicGauges = function(actor, x, y) {
-    this.placeGauge(actor, "hp", x, y);
-    this.placeGauge(actor, "mp", x, y + this.gaugeLineHeight());
+   this.placeGauge(actor, "hp", x, y);
+   this.placeGauge(actor, "mp", x, y + this.gaugeLineHeight());
     if ($dataSystem.optDisplayTp) {
         this.placeGauge(actor, "tp", x, y + this.gaugeLineHeight() * 2);
     }
@@ -6659,3 +6659,23 @@ Window_DebugEdit.prototype.deltaForVariable = function() {
 };
 
 //-----------------------------------------------------------------------------
+
+/*:
+ * @target MZ
+ * @plugindesc Hide the gold window.
+ * @url https://forums.rpgmakerweb.com/posts/1397483/
+ * @author Caethyril
+ * @help Free to use and/or modify for any project, no credit required.
+ */
+;void (alias => {
+  Window_Gold.prototype.initialize = function() {
+    alias.apply(this, arguments);
+    this.openness = 0;
+  };
+})(Window_Gold.prototype.initialize);
+void (alias => {
+  Window_Gold.prototype.open = function() {
+    alias.apply(this, arguments);
+    this.close();
+  };
+})(Window_Gold.prototype.open);
