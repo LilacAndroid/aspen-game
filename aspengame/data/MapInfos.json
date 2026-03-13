@@ -1,4 +1,5 @@
 [
 null,
-{"id":1,"expanded":false,"name":"S1A1 - Hallway","order":1,"parentId":0,"scrollX":819,"scrollY":634}
+{"id":1,"expanded":true,"name":"S1A1 - Hallway","order":2,"parentId":0,"scrollX":540.6666666666666,"scrollY":306},
+{"id":2,"expanded":false,"name":"Title","order":1,"parentId":0,"scrollX":540.6666666666666,"scrollY":306,"quick":false}
 ]
