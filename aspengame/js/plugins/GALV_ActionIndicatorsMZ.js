@@ -290,3 +290,14 @@ Sprite_ActionIcon.prototype.update = function() {
 		this.mod = Math.max(this.mod + -0.01,-0.2);
 	};
 };
+
+Galv.Game_CharacterBase_setDirection = Game_CharacterBase.prototype.setDirection;
+
+Game_CharacterBase.prototype.setDirection = function(d) {
+
+  Galv.Game_CharacterBase_setDirection.call(this,d);
+
+  Galv.AI.needRefresh = true;
+
+};
+
