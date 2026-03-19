@@ -1,8 +1,8 @@
 [
 null,
-{"id":1,"expanded":true,"name":"S1A1 - Hallway","order":2,"parentId":4,"scrollX":540.6666666666666,"scrollY":332.6666666666667},
-{"id":2,"expanded":false,"name":"Title","order":5,"parentId":5,"scrollX":811,"scrollY":459,"quick":false},
-{"id":3,"expanded":true,"name":"Source Map","order":4,"parentId":5,"scrollX":0,"scrollY":0,"quick":false},
+{"id":1,"expanded":true,"name":"S1A1 - Hallway","order":2,"parentId":4,"scrollX":811,"scrollY":459},
+{"id":2,"expanded":false,"name":"Title","order":5,"parentId":5,"scrollX":540.6666666666666,"scrollY":318,"quick":false},
+{"id":3,"expanded":true,"name":"Source Map","order":4,"parentId":5,"scrollX":540.6666666666666,"scrollY":306,"quick":false},
 {"id":4,"expanded":true,"name":"1 - Act 1","order":1,"parentId":0,"scrollX":0,"scrollY":0,"quick":false},
 {"id":5,"expanded":true,"name":"0 - System","order":3,"parentId":0,"scrollX":0,"scrollY":0,"quick":false}
 ]

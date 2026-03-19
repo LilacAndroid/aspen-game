@@ -7,7 +7,7 @@
 @orderAfter DotMoveSystem
 @orderAfter DotMoveSystem_FunctionEx
 
-@plugindesc ♦6.0.2♦ Essential plugin for all Eli plugins.
+@plugindesc ♦6.1.0♦ Essential plugin for all Eli plugins.
 @author Hakuen Studio
 @url https://docs.google.com/document/d/1ckAG8ESh6U47Eje2QZ6oajv-cRcsdUJUmRS7PvOseBc/edit?usp=sharing
 
@@ -52,6 +52,12 @@ https://hakuenstudio.itch.io/eli-book-rpg-maker-mv-mz/community
 @text Updated Error Display
 @type boolean
 @desc Enable improved error log display.
+@default true
+
+@param iterateEventList
+@text Always Iterate Event List
+@type boolean
+@desc Set to true to always iterate event list. Otherwise, event need the note: <IterateList>. See help file.
 @default true
 
 @param engine
@@ -319,7 +325,7 @@ Eli.Easings = {
     },
 }
 
-Eli.AnimeBase = class {
+Eli.AnimeBase = class AnimeBase {
 
 	constructor(target, propName, duration, easing, direction, loop){
         this.initBasic(target, propName, duration, easing)
@@ -575,7 +581,7 @@ Eli.AnimeBase = class {
     }
 }
 
-Eli.AnimeLevel0 = class extends Eli.AnimeBase {
+Eli.AnimeLevel0 = class AnimeLevel0 extends Eli.AnimeBase {
     
 	constructor(data){
 		const {target, propName, incrementValue, direction} = data
@@ -606,7 +612,7 @@ Eli.AnimeLevel0 = class extends Eli.AnimeBase {
 	}
 }
 
-Eli.AnimeLevel1 = class extends Eli.AnimeBase {
+Eli.AnimeLevel1 = class AnimeLevel1 extends Eli.AnimeBase {
 
 	constructor(data){
         const {target, propName, targetValue, duration, easing, direction, loop} = data
@@ -667,7 +673,7 @@ Eli.AnimeLevel1 = class extends Eli.AnimeBase {
 
 }
 
-Eli.AnimeLevel2 = class extends Eli.AnimeLevel1 {
+Eli.AnimeLevel2 = class AnimeLevel2 extends Eli.AnimeLevel1 {
 
 	constructor(data){
         const {startDelay, animationDelay, finishDelay, loopDelay} = data
@@ -792,7 +798,7 @@ Eli.AnimeLevel2 = class extends Eli.AnimeLevel1 {
     }
 }
 
-Eli.AnimeLevel3 = class extends Eli.AnimeLevel2 {
+Eli.AnimeLevel3 = class AnimeLevel3 extends Eli.AnimeLevel2 {
 
 	constructor(data){
 		super(data)
@@ -954,7 +960,7 @@ Eli.AnimeLevel3 = class extends Eli.AnimeLevel2 {
 
 }
 
-Eli.AnimeCollection = class {
+Eli.AnimeCollection = class AnimeCollection {
 
 	constructor(animes, data){
 		this.setAnimations(animes)
@@ -1980,10 +1986,7 @@ Eli.Input = {
     mapKeyboardButton(keyName, overwrite, button){
         const keyCode = this.getKeyboardCode(keyName)
 
-        if(overwrite){
-            Input.keyMapper[keyCode] = button
-
-        }else if(!this.isDefaultKeyboard(keyCode)){
+        if(overwrite || !this.isDefaultKeyboard(keyCode)){
             Input.keyMapper[keyCode] = button
 
         }else{
@@ -1994,10 +1997,7 @@ Eli.Input = {
     mapGamepadButton(keyName, overwrite, button){
         const keyCode = this.getGamepadCode(keyName)
 
-        if(overwrite){
-            Input.gamepadMapper[keyCode] = button
-
-        }else if(!this.isDefaultKeyboard(keyCode)){
+        if(overwrite || !this.isDefaultGamepad(keyCode)){
             Input.gamepadMapper[keyCode] = button
 
         }else{
@@ -2101,6 +2101,26 @@ Eli.PluginManager = {
             offsetX: new Function(offsetX),
             offsetY: new Function(offsetY),
         }
+    },
+
+    parseOperationAndValue(argValue){
+        const rawValue = argValue.trim()
+        const signal = rawValue[0]
+        let operation = "set"
+        let value = 0
+
+        if(isNaN(signal)){
+            operation = {
+                "+": "add",
+                "-": "sub",
+                "=": "set"
+            }[signal]
+            value = Number(rawValue.replace(signal, ""))
+        }else{
+            value = Number(rawValue)
+        }
+
+        return {operation, value}
     },
 
     /**
@@ -2902,7 +2922,130 @@ Eli.VersionManager = {
 	},
 }
 
-/* -------------------------------- ELI ERROR ------------------------------- */
+Eli.Game_PassiveInterpreter = class Game_PassiveInterpreter extends Game_Interpreter{
+
+        setup(list, eventId) {
+            this.clear()
+            this._mapId = $gameMap.mapId()
+            this._eventId = eventId || 0
+            this._list = list
+        }
+
+        updateWait() {return false}
+        // Show Text
+        command101(){return false}
+        // Show Choices
+        command102(){ return false }
+        // Input Number
+        command103(){ return false }
+        // Select Item
+        command104(){ return false }
+        // Show Scrolling Text
+        command105(){ return false }
+        // Timer
+        command124(){ return false }
+        // Change Encounter
+        command136(){ return true }
+        // Transfer Player
+        command201(){ return true }
+        // Set Vehicle Location
+        command202(){ return true }
+        // Set Event Location
+        command203(){ return true }
+        // Scroll Map
+        command204(){ return true }
+        // Set Movement Route
+        command205(){ return true }
+        // Get on/off Vehicle
+        command206() { return true }
+        // Change Transparency
+        command211(){ return true }
+        // Show Animation
+        command212() { return true }
+        // Show Balloon Icon
+        command213() { return true }
+        // Erase Event
+        command214() { return true }
+        // Change Player Followers
+        command216(){ return true }
+        // Gather Followers
+        command217(){ return true }
+        // Fadeout Screen
+        command221() { return true }
+        // Fadein Screen
+        command222() { return true }
+        // Tint Screen
+        command223() { return true }
+        // Flash Screen
+        command224() { return true }
+        // Shake Screen
+        command225() { return true }
+        // Wait
+        command230() { return true }
+        // Show Picture
+        command231(){ return true }
+        // Move Picture
+        command232(){ return true }
+        // Rotate Picture
+        command233(){ return true }
+        // Tint Picture
+        command234(){ return true }
+        // Erase Picture
+        command235(){ return true }
+        // Set Weather Effect
+        command236(){ return true }
+        // Play BGM
+        command241(){ return true }
+        // Fadeout BGM
+        command242(){ return true }
+        // Save BGM
+        command243(){ return true }
+        // Resume BGM
+        command244(){ return true }
+        // Play BGS
+        command245(){ return true }
+        // Fadeout BGS
+        command246(){ return true }
+        // Play ME
+        command249(){ return true }
+        // Play SE
+        command250(){ return true }
+        // Stop SE
+        command251(){ return true }
+        // Play Movie
+        command261(){ return true }
+        // Change Map Name Display
+        command281(){ return true }
+        // Change Tileset
+        command282(){ return true }
+        // Change Parallax
+        command284(){ return true }
+        // Battle Processing
+        command301(params) { return true }
+        // Shop Processing
+        command302(params) { return true }
+        // Name Input Processing
+        command303(params) { return true }
+        // Change Actor Images
+        command322(params) { return true }
+        // Change Vehicle Image
+        command323(params) { return true }
+        // Show Battle Animation
+        command337(params) { return true }
+        // Force Action
+        command339(params) { return true }
+        // Abort Battle
+        command340() { return true }
+        // Open Menu Screen
+        command351() { return true }
+        // Open Save Screen
+        command352() { return true }
+        // Game Over
+        command353() { return true }
+        // Return to Title Screen
+        command354() { return true }
+}
+
 Eli.ErrorPrinter = {
 
 	interpreter: null,
@@ -3185,6 +3328,7 @@ Eli.Book = {
         constructor(parameters){
             this.checkVersion = (parameters.checkVersion || "true") === "true"
             this.updateErrorPrinter = (parameters.updateErrorPrinter || "true") === "true"
+            this.iterateEventList = (parameters.iterateEventList || "true") === "true"
             this.engine = this.createEngine(JSON.parse(parameters.engine))
             this.playtest = this.createPlaytest(JSON.parse(parameters.playtest))
         }
@@ -3215,7 +3359,7 @@ Eli.Book = {
     },
     
     initialize(){
-        Eli.VersionManager.register("EliMZ_Book", "6.0.2")
+        Eli.VersionManager.register("EliMZ_Book", "6.1.0")
         this.initParameters()
         this.setDocumentStyle()
         window.addEventListener("load", this.onWindowLoad.bind(this))
@@ -3675,73 +3819,6 @@ TouchInput.storeMouseCoordinates = function(event) {
 }
 
 /* ========================================================================== */
-/*                                    SCENE                                   */
-/* ========================================================================== */
-
-/* ------------------------------- SCENE BOOT ------------------------------- */
-
-Alias.Scene_Boot_onDatabaseLoaded = Scene_Boot.prototype.onDatabaseLoaded
-Scene_Boot.prototype.onDatabaseLoaded = function() {
-    Alias.Scene_Boot_onDatabaseLoaded.call(this)
-    this.processDatabaseNotesAndMetas()
-}
-
-Scene_Boot.prototype.processDatabaseNotesAndMetas = function(){
-    for(let i = 1; i < $dataActors.length; i++){
-        this.processDataActors($dataActors[i], i)
-    }
-    for(let i = 1; i < $dataClasses.length; i++){
-        this.processDataClasses($dataClasses[i], i)
-    }
-    for(let i = 1; i < $dataSkills.length; i++){
-        this.processDataSkills($dataSkills[i], i)
-    }
-    for(let i = 1; i < $dataItems.length; i++){
-        this.processDataItems($dataItems[i], i)
-    }
-    for(let i = 1; i < $dataWeapons.length; i++){
-        this.processDataWeapons($dataWeapons[i], i)
-    }
-    for(let i = 1; i < $dataArmors.length; i++){
-        this.processDataArmors($dataArmors[i], i)
-    }
-    for(let i = 1; i < $dataEnemies.length; i++){
-        this.processDataEnemies($dataEnemies[i], i)
-    }
-    for(let i = 1; i < $dataTroops.length; i++){
-        this.processDataTroops($dataTroops[i], i)
-    }
-    for(let i = 1; i < $dataStates.length; i++){
-        this.processDataStates($dataStates[i], i)
-    }
-    for(let i = 1; i < $dataTilesets.length; i++){
-        this.processDataTilesets($dataTilesets[i], i)
-    }
-}
-
-Scene_Boot.prototype.processDataActors = function(data, index){}
-Scene_Boot.prototype.processDataClasses = function(data, index){}
-Scene_Boot.prototype.processDataSkills = function(data, index){}
-Scene_Boot.prototype.processDataItems = function(data, index){}
-Scene_Boot.prototype.processDataWeapons = function(data, index){}
-Scene_Boot.prototype.processDataArmors = function(data, index){}
-Scene_Boot.prototype.processDataEnemies = function(data, index){}
-Scene_Boot.prototype.processDataTroops = function(data, index){}
-Scene_Boot.prototype.processDataStates = function(data, index){}
-Scene_Boot.prototype.processDataTilesets = function(data, index){}
-
-/* -------------------------------- SCENE MAP ------------------------------- */
-Alias.Scene_Map_start = Scene_Map.prototype.start
-Scene_Map.prototype.start = function() {
-    if(this._transfer){
-        this.beforeStartAndTransferIsOn()
-    }
-    Alias.Scene_Map_start.call(this)
-}
-
-Scene_Map.prototype.beforeStartAndTransferIsOn = function() {}
-
-/* ========================================================================== */
 /*                                   MANAGER                                  */
 /* ========================================================================== */
 
@@ -3766,6 +3843,15 @@ DataManager.extractSaveContents = function(contents) {
     $eliData = contents.eli
 }
 
+/* ----------------------------- CONFIG MANAGER ----------------------------- */
+ConfigManager.readNumber = function(config, name, defaultValue){
+    if(name in config){
+        return Number(config[name])
+    }else{
+        return defaultValue
+    }
+}
+
 /* ------------------------------ SCENE MANAGER ----------------------------- */
 if(Eli.Book.getPlaytestParam().gameFocus && Utils.isOptionValid("test")){
 
@@ -3784,6 +3870,59 @@ if(Eli.Book.getPlaytestParam().quickRestart && Utils.isOptionValid("test")){
             Alias.SceneManager_reloadGame.call(this)
         }
     }
+}
+
+/* ----------------------------- BATTLE MANAGER ----------------------------- */
+BattleManager.battleTrigger = ""
+
+Alias.BattleManager_setup = BattleManager.setup
+BattleManager.setup = function(troopId, canEscape, canLose) {
+    this.beforeSetup(troopId, canEscape, canLose)
+    Alias.BattleManager_setup.call(this, troopId, canEscape, canLose)
+    this.afterSetup(troopId, canEscape, canLose)
+}
+
+BattleManager.beforeSetup = function(troopId, canEscape, canLose){}
+BattleManager.afterSetup = function(troopId, canEscape, canLose){}
+
+BattleManager.setBattleTrigger = function(origin){
+    this.battleTrigger = origin
+}
+
+BattleManager.getBattleTrigger = function(){
+    return this.battleTrigger
+}
+
+BattleManager.clearBattleTrigger = function(){
+    this.setBattleTrigger("")
+}
+
+BattleManager.setMapRandomBattleTrigger = function(){
+    this.setBattleTrigger("MapRandom")
+}
+
+BattleManager.setEventRandomBattleTrigger = function(){
+    this.setBattleTrigger("EventRandom")
+}
+
+BattleManager.setCommandEventBattleTrigger = function(){
+    this.setBattleTrigger("CommandEvent")
+}
+
+BattleManager.isBattleTriggeredByMapRandom = function(){
+    return this.getBattleTrigger() === "MapRandom"
+}
+
+BattleManager.isBattleTriggeredByEventRandom = function(){
+    return this.getBattleTrigger() === "EventRandom"
+}
+
+BattleManager.isBattleTriggeredByCommandEvent = function(){
+    return this.getBattleTrigger() === "CommandEvent"
+}
+
+BattleManager.isRandomBattle = function(){
+    return this.isBattleTriggeredByMapRandom() || this.isBattleTriggeredByEventRandom()
 }
 
 /* ========================================================================== */
@@ -3824,6 +3963,21 @@ Game_Player.prototype.getGlobalKey = function(forActor) {
     }else{
         return `Player`
     }
+}
+
+Alias.Game_Player_makeEncounterTroopId = Game_Player.prototype.makeEncounterTroopId
+Game_Player.prototype.makeEncounterTroopId = function() {
+    if(!BattleManager.isBattleTriggeredByEventRandom()){
+        BattleManager.setMapRandomBattleTrigger()
+    }
+
+    const troopId = Alias.Game_Player_makeEncounterTroopId.call(this)
+
+    if(!$dataTroops[troopId]){
+        BattleManager.clearBattleTrigger()
+    }
+    
+    return troopId
 }
 
 /* ----------------------------- GAME FOLLOWERS ----------------------------- */
@@ -3922,8 +4076,12 @@ Game_Event.prototype.checkListIteration = function(){
     this.afterListIteration()
 }
 
+Game_Event.prototype.hasIterateListNote = function(){
+    return this.event().note.toLowerCase().includes("<iteratelist>")
+}
+
 Game_Event.prototype.canIterateList = function(){
-    return this.metaEli.hasOwnProperty("IterateList")
+    return Eli.Book.getParam().iterateEventList || this.hasIterateListNote()
 }
 
 Game_Event.prototype.startIterateList = function(){
@@ -3948,6 +4106,30 @@ Game_Event.prototype.getMapSprite = function() {
 
 Game_Event.prototype.getGlobalKey = function(forActor) {
     return `Map_${this._mapId}_Event_${this.eventId()}`
+}
+
+Game_Event.prototype.isActionTrigger = function() {
+    return this._trigger === 0
+}
+
+Game_Event.prototype.isPlayerTouchTrigger = function() {
+    return this._trigger === 1
+}
+
+Game_Event.prototype.isEventTouchTrigger = function() {
+    return this._trigger === 2
+}
+
+Game_Event.prototype.isAutorunTrigger = function() {
+    return this._trigger === 3
+}
+
+Game_Event.prototype.isParallelTrigger = function() {
+    return this._trigger === 4
+}
+
+Game_Event.prototype.getTriggerType = function(trigger) {
+    return ["ActionButton", "PlayerTouch", "EventTouch", "Autorun", "Parallel"][trigger] || "Invalid"
 }
 
 /* ------------------------------ GAME VEHICLE ------------------------------ */
@@ -4117,6 +4299,19 @@ Game_Interpreter.prototype.assignMesssageInterpreterAndIds = function() {
     $gameMessage.setEventIds(this._eventId, this._commonEventId)
 }
 
+Alias.Game_Interpreter_command301 = Game_Interpreter.prototype.command301
+Game_Interpreter.prototype.command301 = function(params) {
+    if(!$gameParty.inBattle()){
+        this.command301_NotInBattle(params)
+    }
+    
+    return Alias.Game_Interpreter_command301.call(this, params)
+}
+
+Game_Interpreter.prototype.command301_NotInBattle = function(params) {
+    BattleManager.setCommandEventBattleTrigger()
+}
+
 // Plugin Command
 Alias.Game_Interpreter_command357 = Game_Interpreter.prototype.command357
 Game_Interpreter.prototype.command357 = function(params){
@@ -4200,6 +4395,72 @@ Game_Interpreter.prototype.isNextMessageWindowCommand = function(){
     }
 }
 
+/* ========================================================================== */
+/*                                    SCENE                                   */
+/* ========================================================================== */
+
+/* ------------------------------- SCENE BOOT ------------------------------- */
+
+Alias.Scene_Boot_onDatabaseLoaded = Scene_Boot.prototype.onDatabaseLoaded
+Scene_Boot.prototype.onDatabaseLoaded = function() {
+    Alias.Scene_Boot_onDatabaseLoaded.call(this)
+    this.processDatabaseNotesAndMetas()
+}
+
+Scene_Boot.prototype.processDatabaseNotesAndMetas = function(){
+    for(let i = 1; i < $dataActors.length; i++){
+        this.processDataActors($dataActors[i], i)
+    }
+    for(let i = 1; i < $dataClasses.length; i++){
+        this.processDataClasses($dataClasses[i], i)
+    }
+    for(let i = 1; i < $dataSkills.length; i++){
+        this.processDataSkills($dataSkills[i], i)
+    }
+    for(let i = 1; i < $dataItems.length; i++){
+        this.processDataItems($dataItems[i], i)
+    }
+    for(let i = 1; i < $dataWeapons.length; i++){
+        this.processDataWeapons($dataWeapons[i], i)
+    }
+    for(let i = 1; i < $dataArmors.length; i++){
+        this.processDataArmors($dataArmors[i], i)
+    }
+    for(let i = 1; i < $dataEnemies.length; i++){
+        this.processDataEnemies($dataEnemies[i], i)
+    }
+    for(let i = 1; i < $dataTroops.length; i++){
+        this.processDataTroops($dataTroops[i], i)
+    }
+    for(let i = 1; i < $dataStates.length; i++){
+        this.processDataStates($dataStates[i], i)
+    }
+    for(let i = 1; i < $dataTilesets.length; i++){
+        this.processDataTilesets($dataTilesets[i], i)
+    }
+}
+
+Scene_Boot.prototype.processDataActors = function(data, index){}
+Scene_Boot.prototype.processDataClasses = function(data, index){}
+Scene_Boot.prototype.processDataSkills = function(data, index){}
+Scene_Boot.prototype.processDataItems = function(data, index){}
+Scene_Boot.prototype.processDataWeapons = function(data, index){}
+Scene_Boot.prototype.processDataArmors = function(data, index){}
+Scene_Boot.prototype.processDataEnemies = function(data, index){}
+Scene_Boot.prototype.processDataTroops = function(data, index){}
+Scene_Boot.prototype.processDataStates = function(data, index){}
+Scene_Boot.prototype.processDataTilesets = function(data, index){}
+
+/* -------------------------------- SCENE MAP ------------------------------- */
+Alias.Scene_Map_start = Scene_Map.prototype.start
+Scene_Map.prototype.start = function() {
+    if(this._transfer){
+        this.beforeStartAndTransferIsOn()
+    }
+    Alias.Scene_Map_start.call(this)
+}
+
+Scene_Map.prototype.beforeStartAndTransferIsOn = function() {}
 
 /* ========================================================================== */
 /*                                   SPRITES                                  */

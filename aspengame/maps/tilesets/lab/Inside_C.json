@@ -1,0 +1,15 @@
+{ "columns":16,
+ "image":"..\/..\/..\/img\/tilesets\/Inside_C.png",
+ "imageheight":768,
+ "imagewidth":768,
+ "margin":0,
+ "name":"Inside_C",
+ "spacing":0,
+ "tilecount":256,
+ "tiledversion":"1.12.0",
+ "tileheight":48,
+ "tilewidth":48,
+ "transparentcolor":"#ff00ff",
+ "type":"tileset",
+ "version":"1.10"
+}
