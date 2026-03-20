@@ -1104,10 +1104,10 @@ function AudioManager() {
     throw new Error("This is a static class");
 }
 
-AudioManager._bgmVolume = 100;
-AudioManager._bgsVolume = 100;
-AudioManager._meVolume = 100;
-AudioManager._seVolume = 100;
+AudioManager._bgmVolume = 50;
+AudioManager._bgsVolume = 50;
+AudioManager._meVolume = 50;
+AudioManager._seVolume = 50;
 AudioManager._currentBgm = null;
 AudioManager._currentBgs = null;
 AudioManager._bgmBuffer = null;
